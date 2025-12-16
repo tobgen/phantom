@@ -1,6 +1,6 @@
 [![Downloads](https://img.shields.io/github/downloads/jhead/phantom/total)](https://github.com/jhead/phantom/releases) [![Gitter](https://badges.gitter.im/phantom-minecraft/community.svg)](https://gitter.im/phantom-minecraft/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-# phantom
+# phantom - FORK
 
 Makes hosted Bedrock/MCPE servers show up as LAN servers, specifically for consoles.
 
@@ -12,17 +12,7 @@ It's like having a LAN server that's not actually there, spooky.
 
 phantom is a command line application with no GUI (yet). See the usage section below.
 
-[Download](https://github.com/jhead/phantom/releases) phantom from the releases page.
-
-**macOS / Linux**
-
-Add execute permissions if necessary:
-
-```bash
-$ chmod u+x ./phantom-<os>
-```
-
-Just replace `<os>` with macos, linux, etc. for the correct OS you're using.
+You need to build your own binary if you are using this fork/repo
 
 ## Usage
 
