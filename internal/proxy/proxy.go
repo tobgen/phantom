@@ -187,7 +187,13 @@ func (proxy *ProxyServer) readLoop(listener net.PacketConn) {
 // data from the server and send it back to the client.
 func (proxy *ProxyServer) processDataFromClients(listener net.PacketConn, packetBuffer []byte) error {
 	// Read the next packet from the client
-	read, client, _ := listener.ReadFrom(packetBuffer)
+	read, client, err := listener.ReadFrom(packetBuffer)
+	if err != nil {
+		// Network read errors can occur during normal operation (connection closed, etc.)
+		// Log at debug level to avoid spam, but don't treat as fatal
+		log.Debug().Msgf("Error reading from client: %v", err)
+		return err
+	}
 	if read <= 0 {
 		return nil
 	}

@@ -43,6 +43,26 @@ func main() {
 		}
 	}
 
+	// Validate server address format before proceeding
+	// Basic validation: check if it looks like an address:port format
+	// More thorough validation happens in proxy.New() via net.ResolveUDPAddr
+	if len(*serverArg) == 0 || len(*serverArg) > 256 {
+		fmt.Printf("Invalid server address: address too long or empty\n")
+		return
+	}
+	// Check for basic format (contains : for port)
+	hasColon := false
+	for _, char := range *serverArg {
+		if char == ':' {
+			hasColon = true
+			break
+		}
+	}
+	if !hasColon {
+		fmt.Printf("Invalid server address format: missing port (expected format: host:port, e.g., 1.2.3.4:19132)\n")
+		return
+	}
+
 	bindAddressString = *bindArg
 	serverAddressString = *serverArg
 	idleTimeout := time.Duration(*timeoutArg) * time.Second
@@ -61,13 +81,13 @@ func main() {
 		Level(logLevel)
 
 	proxyServer, err := proxy.New(proxy.ProxyPrefs{
-		bindAddressString,
-		bindPortInt,
-		serverAddressString,
-		idleTimeout,
-		*ipv6Arg,
-		*removePortsArg,
-		*workersArg,
+		BindAddress:  bindAddressString,
+		BindPort:     bindPortInt,
+		RemoteServer: serverAddressString,
+		IdleTimeout:  idleTimeout,
+		EnableIPv6:   *ipv6Arg,
+		RemovePorts:  *removePortsArg,
+		NumWorkers:   *workersArg,
 	})
 
 	if err != nil {

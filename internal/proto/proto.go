@@ -82,6 +82,18 @@ func ReadUnconnectedPing(in []byte) (reply *UnconnectedPing, err error) {
 
 	pongLen := binary.BigEndian.Uint16(pongLenBytes)
 
+	// Security: Validate pong data length to prevent DoS attacks
+	// Minecraft Bedrock pong data is typically < 512 bytes, but we allow up to 1024 for safety
+	const maxPongDataLen = 1024
+	if pongLen > maxPongDataLen {
+		return nil, fmt.Errorf("pong data length too large: %d (max: %d)", pongLen, maxPongDataLen)
+	}
+
+	// Also ensure we have enough data in the buffer
+	if buf.Len() < int(pongLen) {
+		return nil, fmt.Errorf("insufficient data in buffer for pong length %d", pongLen)
+	}
+
 	pongDataBytes := make([]byte, pongLen)
 	if _, err := buf.Read(pongDataBytes); err != nil {
 		return nil, err
