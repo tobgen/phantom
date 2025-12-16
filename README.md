@@ -13,6 +13,7 @@ It's like having a LAN server that's not actually there, spooky.
 phantom is a command line application with no GUI (yet). See the usage section below.
 
 You need to build your own binary if you are using this fork/repo
+go build -o phantom ./cmd/phantom.go
 
 ## Usage
 
